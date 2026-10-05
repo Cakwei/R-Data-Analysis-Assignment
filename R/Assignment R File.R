@@ -1,8 +1,16 @@
+# ====
+# README
+
+# 1. Please set working directory for this project to the "R-Data-Analysis-Assignment/R/data" folder.
+# 2. If you have not installed dplyr or tidyr packages for this project, please do so :)
+# ====
+
+# Uncomment the line below if you have no installed the packages
 # install.packages(c("dplyr", "tidyr"))
 library(dplyr)
 library(tidyr)
 
-
+# ==== Beginning of the actual code ====
 airQuality <- read.csv("2. Beijing_AirQuality.csv")
 
 # Check all row for "No" column
