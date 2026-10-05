@@ -75,17 +75,10 @@ levels(factor(airQuality$station))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+airQuality %>%
+  group_by_all() %>%
+  filter(n() > 1) %>%
+  ungroup()
 
 
 
@@ -108,6 +101,12 @@ levels(factor(airQuality$station))
 
 # Individual: Analysis Code
 # Every group has 1 main hypothesis -> split to become few objectives (1 person each) and need to have 3 analysis
+
+
+# Lecturer Question To Be Asked:
+
+# Is row number unique?
+# For hour 24 set to 24 or 0?
 
 
 
