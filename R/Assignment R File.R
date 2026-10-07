@@ -13,17 +13,25 @@ library(tidyr)
 # ==== Beginning of the actual code ====
 airQuality <- read.csv("2. Beijing_AirQuality.csv")
 
+# List all columns in dataset
+colnames(airQuality)
 # Check all row for "No" column
 which(grepl("[^0-9]", airQuality$No))
 
 # Check all row for "year" column
-levels(factor(airQuality$year))
+levels(factor(airQuality$year, exclude=FALSE))
+table(airQuality$year, exclude = FALSE)
+length(unique(airQuality$year))
 
 # Check all row for "month" column
-levels(factor(airQuality$month))
+levels(factor(airQuality$month, exclude=FALSE))
+table(airQuality$month, exclude = FALSE)
+length(unique(airQuality$month))
 
 # Check all row for "day" column
-levels(factor(airQuality$day))
+levels(factor(airQuality$day, exclude=FALSE))
+table(airQuality$day, exclude = FALSE)
+length(unique(airQuality$day))
 
 # ====
 # Check all row for "hour" column
@@ -108,5 +116,7 @@ airQuality %>%
 # Is row number unique?
 # For hour 24 set to 24 or 0?
 
+
+class(c(1, "a", TRUE))
 
 
