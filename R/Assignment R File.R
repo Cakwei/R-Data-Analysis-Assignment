@@ -15,21 +15,22 @@ airQuality <- read.csv("2. Beijing_AirQuality.csv")
 
 # List all columns in dataset
 colnames(airQuality)
+
 # Check all row for "No" column
 which(grepl("[^0-9]", airQuality$No))
 
 # Check all row for "year" column
-levels(factor(airQuality$year, exclude=FALSE))
+# levels(factor(airQuality$year, exclude=FALSE))
 table(airQuality$year, exclude = FALSE)
 length(unique(airQuality$year))
 
 # Check all row for "month" column
-levels(factor(airQuality$month, exclude=FALSE))
+# levels(factor(airQuality$month, exclude=FALSE))
 table(airQuality$month, exclude = FALSE)
 length(unique(airQuality$month))
 
 # Check all row for "day" column
-levels(factor(airQuality$day, exclude=FALSE))
+# levels(factor(airQuality$day, exclude=FALSE))
 table(airQuality$day, exclude = FALSE)
 length(unique(airQuality$day))
 
@@ -40,40 +41,83 @@ length(unique(airQuality$day))
 airQuality <- airQuality %>%
   mutate(hour = if_else(hour == 25, 0, hour))
 
-levels(factor(airQuality$hour))
+table(airQuality$hour, exclude = FALSE)
+length(unique(airQuality$hour))
+
 # ====
 
 # Check all row for "PM2.5" column
-levels(factor(airQuality$PM2.5, exclude=FALSE))
+# levels(factor(airQuality$PM2.5, exclude=FALSE))
+table(airQuality$PM2.5, exclude = FALSE)
+length(unique(airQuality$PM2.5))
+
 
 airQuality <- airQuality %>%
-  mutate(PM2.5 = if_else(is.na(PM2.5), 0, PM2.5))
+  mutate(PM2.5 = if_else(is.na(PM2.5), 0, PM2.5)) # ADJUST Accordingly
 
 # Check all row for "PM10" column
-levels(factor(airQuality$PM10))
+table(airQuality$PM10, exclude = FALSE)
+length(unique(airQuality$PM10))
 
 
-# Check all row for "SO2 column
-levels(factor(airQuality$SO2))
+airQuality <- airQuality %>%
+  mutate(PM10 = if_else(is.na(PM10), 0, PM10)) # ADJUST Accordingly
 
 
-# Check all row for "NO2 column
-levels(factor(airQuality$NO2))
+
+# Check all row for "SO2" column
+table(airQuality$SO2, exclude = FALSE)
+length(unique(airQuality$SO2))
+
+# Check all row for "NO2" column
+table(airQuality$NO2, exclude = FALSE)
+length(unique(airQuality$NO2))
+
+# Check all row for "CO" column
+table(airQuality$CO, exclude = FALSE)
+length(unique(airQuality$CO))
+
+# Check all row for "O3" column
+table(airQuality$O3, exclude = FALSE)
+length(unique(airQuality$O3))
 
 
-# Check all row for "CO column
-levels(factor(airQuality$CO))
+# Check all row for "TEMP" column ==================== COULD BE WRONG?
+table(airQuality$TEMP, exclude = FALSE)
+length(unique(airQuality$TEMP))
+
+# Check all row for "PRES" column
+table(airQuality$PRES, exclude = FALSE)
+length(unique(airQuality$PRES))
+
+# Check all row for "DEWP" column
+table(airQuality$DEWP, exclude = FALSE)
+length(unique(airQuality$DEWP))
 
 
-# Check all row for "O3 column
-levels(factor(airQuality$O3))
+# Check all row for "RAIN" column
+table(airQuality$RAIN, exclude = FALSE)
+length(unique(airQuality$RAIN))
+
+
+# Check all row for "wd" column ==================== NAME CONVERSION NEEDED
+table(airQuality$wd, exclude = FALSE)
+length(unique(airQuality$wd))
+
+
+# Check all row for "WSPM" column
+table(airQuality$WSPM, exclude = FALSE)
+length(unique(airQuality$WSPM))
 
 
 # Check all row for "station" column
 airQuality <- airQuality %>%
   mutate(station = tolower(station))
 
-levels(factor(airQuality$station))
+# levels(factor(airQuality$station))
+table(airQuality$station, exclude = FALSE)
+length(unique(airQuality$station))
+
 
 # Quick Check below:
 # airQuality[which(airQuality$hour == 25),]
