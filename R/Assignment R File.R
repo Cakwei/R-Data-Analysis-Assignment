@@ -100,9 +100,60 @@ table(airQuality$RAIN, exclude = FALSE)
 length(unique(airQuality$RAIN))
 
 
-# Check all row for "wd" column ==================== NAME CONVERSION NEEDED
+# Check all row for "wd" column ==================== NA Exist
 table(airQuality$wd, exclude = FALSE)
 length(unique(airQuality$wd))
+
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "e", "E", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "ene", "ENE", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "ese", "ESE", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "n", "N", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "ne", "NE", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "nne", "NNE", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "nnw", "NNW", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "nw", "NW", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "s", "S", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "se", "SE", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "sse", "SSE", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "ssw", "SSW", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "sw", "SW", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "w", "W", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "wnw", "WNW", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(tolower(wd) == "wsw", "WSW", wd))
+
+
 
 
 # Check all row for "WSPM" column
@@ -111,11 +162,24 @@ length(unique(airQuality$WSPM))
 
 
 # Check all row for "station" column
-airQuality <- airQuality %>%
-  mutate(station = tolower(station))
-
-# levels(factor(airQuality$station))
+# levels(factor(airQuality$station)) DONE
 table(airQuality$station, exclude = FALSE)
+
+airQuality <- airQuality %>%
+  mutate(station = if_else(tolower(station) == "dingling", "Dingling", station))
+
+airQuality <- airQuality %>%
+  mutate(station = if_else(tolower(station) == "dongsi", "Dongsi", station))
+
+airQuality <- airQuality %>%
+  mutate(station = if_else(tolower(station) == "gucheng", "Gucheng", station))
+
+airQuality <- airQuality %>%
+  mutate(station = if_else(tolower(station) == "huairou", "Huairou", station))
+
+airQuality <- airQuality %>%
+  mutate(station = if_else(tolower(station) == "wanliu", "Wanliu", station))
+
 length(unique(airQuality$station))
 
 
