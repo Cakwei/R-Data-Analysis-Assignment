@@ -6,19 +6,14 @@
 # ====
 
 # Uncomment the line below if you have no installed the packages
-# install.packages(c("dplyr", "tidyr"))
+# install.packages(c("dplyr"))
 library(dplyr)
-library(tidyr)
 
 # ==== Beginning of the actual code ====
 airQuality <- read.csv("2. Beijing_AirQuality.csv")
 
 # List all columns in dataset
 colnames(airQuality)
-
-# Check for duplicates (Pending approval)
-airQuality <- airQuality[!duplicated(airQuality$No),]
-airQuality
 
 # Check all row for "No" column
 which(grepl("[^0-9]", airQuality$No))
@@ -47,27 +42,25 @@ airQuality <- airQuality %>%
 
 table(airQuality$hour, exclude = FALSE)
 length(unique(airQuality$hour))
-
 # ====
 
 # Check all row for "PM2.5" column
 # levels(factor(airQuality$PM2.5, exclude=FALSE))
+# Cannot be negative based on https://pmc.ncbi.nlm.nih.gov/articles/PMC10497433/
 table(airQuality$PM2.5, exclude = FALSE)
+airQuality$PM2.5[airQuality$PM2.5 <= 0] <- NA
 length(unique(airQuality$PM2.5))
 
 
-airQuality <- airQuality %>%
-  mutate(PM2.5 = if_else(is.na(PM2.5), 0, PM2.5)) # ADJUST Accordingly
+# airQuality <- airQuality %>%
+#   mutate(PM2.5 = if_else(is.na(PM2.5), 0, PM2.5)) # ADJUST Accordingly
 
 # Check all row for "PM10" column
 table(airQuality$PM10, exclude = FALSE)
 length(unique(airQuality$PM10))
 
-
 airQuality <- airQuality %>%
-  mutate(PM10 = if_else(is.na(PM10), 0, PM10)) # ADJUST Accordingly
-
-
+  mutate(PM10 = if_else(is.na(PM10), NA, PM10)) # ADJUST Accordingly
 
 # Check all row for "SO2" column
 table(airQuality$SO2, exclude = FALSE)
@@ -87,7 +80,9 @@ length(unique(airQuality$O3))
 
 
 # Check all row for "TEMP" column ==================== -999 TEMPS
-table(airQuality$TEMP, exclude = FALSE)
+table(airQuality$TEMP, exclude = FALSE) # Checks first 6
+tail(table(airQuality$TEMP, exclude = FALSE)) # Check last 6
+airQuality$TEMP[airQuality$TEMP <= -50] <- NA
 length(unique(airQuality$TEMP))
 
 # Check all row for "PRES" column
@@ -103,65 +98,14 @@ length(unique(airQuality$DEWP))
 table(airQuality$RAIN, exclude = FALSE)
 length(unique(airQuality$RAIN))
 
-
 # Check all row for "wd" column ==================== NA Exist
 table(airQuality$wd, exclude = FALSE)
 length(unique(airQuality$wd))
-airQuality$wd <- tolower(airQuality$wd)
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "e", "E", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "ene", "ENE", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "ese", "ESE", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "n", "N", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "ne", "NE", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "nne", "NNE", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "nnw", "NNW", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "nw", "NW", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "s", "S", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "se", "SE", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "sse", "SSE", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "ssw", "SSW", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "sw", "SW", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "w", "W", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "wnw", "WNW", wd))
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(wd == "wsw", "WSW", wd))
-
-
-
+airQuality$wd <- toupper(airQuality$wd)
 
 # Check all row for "WSPM" column
 table(airQuality$WSPM, exclude = FALSE)
+airQuality$WSPM[airQuality$WSPM < 0] <- NA
 length(unique(airQuality$WSPM))
 
 
@@ -170,43 +114,15 @@ length(unique(airQuality$WSPM))
 table(airQuality$station, exclude = FALSE)
 airQuality$station <- tolower(airQuality$station)
 unique(airQuality$station)
-airQuality <- airQuality %>%
-  mutate(station = if_else(tolower(station) == "dingling", "Dingling", station))
-
-airQuality <- airQuality %>%
-  mutate(station = if_else(tolower(station) == "dongsi", "Dongsi", station))
-
-airQuality <- airQuality %>%
-  mutate(station = if_else(tolower(station) == "gucheng", "Gucheng", station))
-
-airQuality <- airQuality %>%
-  mutate(station = if_else(tolower(station) == "huairou", "Huairou", station))
-
-airQuality <- airQuality %>%
-  mutate(station = if_else(tolower(station) == "wanliu", "Wanliu", station))
-
 length(unique(airQuality$station))
 
-
-# Quick Check below:
-# airQuality[which(airQuality$hour == 25),]
-# airQuality %>% arrange(year, month, day , hour)
+# Check for duplicates (Pending approval)
+# Duplicates for rows ALL SIMILAR data
+airQuality <- airQuality[!duplicated(airQuality), ]
+airQuality
+airQuality <- airQuality[!duplicated(airQuality[, c("No","station")]), ]
+airQuality
 # ====
-
-
-
-
-airQuality %>%
-  group_by_all() %>%
-  filter(n() > 1) %>%
-  ungroup()
-
-
-
-
-
-
-
 
 # Required Wrangling For Col: station, wd,
 # ====
@@ -221,10 +137,21 @@ airQuality %>%
 # public-health advisories and inform pollution-control decisions
 
 # Individual: Analysis Code
-# Every group has 1 main hypothesis -> split to become few objectives (1 person each) and need to have 3 analysis
+# Every group has 1 main hypothesis -> split to become few objectives/processes to solve the hypothesis (1 person each) and need to have 3 analysis
 
 
 # Lecturer Question To Be Asked:
 
 # Is row number unique?
 # For hour 24 set to 24 or 0?
+
+
+
+# Final Checks
+nrow(airQuality)                    # expect 175320
+table(airQuality$station)           # expect 35064 each
+range(airQuality$hour)              # expect 0 23
+sum(airQuality$TEMP <= -50, na.rm = TRUE)   # expect 0
+min(airQuality$WSPM, na.rm = TRUE)  # expect >= 0
+length(unique(airQuality$wd))           # expect 16 (+ NA)
+duplicated(airQuality[, c("station", "datetime")])  # expect 0
