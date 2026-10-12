@@ -16,6 +16,10 @@ airQuality <- read.csv("2. Beijing_AirQuality.csv")
 # List all columns in dataset
 colnames(airQuality)
 
+# Check for duplicates (Pending approval)
+airQuality <- airQuality[!duplicated(airQuality$No),]
+airQuality
+
 # Check all row for "No" column
 which(grepl("[^0-9]", airQuality$No))
 
@@ -82,7 +86,7 @@ table(airQuality$O3, exclude = FALSE)
 length(unique(airQuality$O3))
 
 
-# Check all row for "TEMP" column ==================== COULD BE WRONG?
+# Check all row for "TEMP" column ==================== -999 TEMPS
 table(airQuality$TEMP, exclude = FALSE)
 length(unique(airQuality$TEMP))
 
@@ -103,55 +107,55 @@ length(unique(airQuality$RAIN))
 # Check all row for "wd" column ==================== NA Exist
 table(airQuality$wd, exclude = FALSE)
 length(unique(airQuality$wd))
-
-
-airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "e", "E", wd))
+airQuality$wd <- tolower(airQuality$wd)
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "ene", "ENE", wd))
+  mutate(wd = if_else(wd == "e", "E", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "ese", "ESE", wd))
+  mutate(wd = if_else(wd == "ene", "ENE", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "n", "N", wd))
+  mutate(wd = if_else(wd == "ese", "ESE", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "ne", "NE", wd))
+  mutate(wd = if_else(wd == "n", "N", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "nne", "NNE", wd))
+  mutate(wd = if_else(wd == "ne", "NE", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "nnw", "NNW", wd))
+  mutate(wd = if_else(wd == "nne", "NNE", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "nw", "NW", wd))
+  mutate(wd = if_else(wd == "nnw", "NNW", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "s", "S", wd))
+  mutate(wd = if_else(wd == "nw", "NW", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "se", "SE", wd))
+  mutate(wd = if_else(wd == "s", "S", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "sse", "SSE", wd))
+  mutate(wd = if_else(wd == "se", "SE", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "ssw", "SSW", wd))
+  mutate(wd = if_else(wd == "sse", "SSE", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "sw", "SW", wd))
+  mutate(wd = if_else(wd == "ssw", "SSW", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "w", "W", wd))
+  mutate(wd = if_else(wd == "sw", "SW", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "wnw", "WNW", wd))
+  mutate(wd = if_else(wd == "w", "W", wd))
 
 airQuality <- airQuality %>%
-  mutate(wd = if_else(tolower(wd) == "wsw", "WSW", wd))
+  mutate(wd = if_else(wd == "wnw", "WNW", wd))
+
+airQuality <- airQuality %>%
+  mutate(wd = if_else(wd == "wsw", "WSW", wd))
 
 
 
@@ -164,7 +168,8 @@ length(unique(airQuality$WSPM))
 # Check all row for "station" column
 # levels(factor(airQuality$station)) DONE
 table(airQuality$station, exclude = FALSE)
-
+airQuality$station <- tolower(airQuality$station)
+unique(airQuality$station)
 airQuality <- airQuality %>%
   mutate(station = if_else(tolower(station) == "dingling", "Dingling", station))
 
@@ -223,8 +228,3 @@ airQuality %>%
 
 # Is row number unique?
 # For hour 24 set to 24 or 0?
-
-# Edit
-class(c(1, "a", TRUE))
-
-
