@@ -98,11 +98,13 @@ dayCheck_Before <- airQuality[
 dayCheck_Before <- dayCheck_Before[order(dayCheck_Before$No), ]
 print(dayCheck_Before, row.names = FALSE)
 
-# Solution: Sort ascending by station and "No", and replace hour 25 with correct hour
+# Solution: Sort ascending by station and "No", group by day, and inject the 0 to 23 sequence
 airQuality <- airQuality[order(airQuality$station, airQuality$No), ]
 
 airQuality <- airQuality %>%
-  mutate(hour = if_else(hour == 25L, as.integer((No - 1L) %% 24L), hour))
+  group_by(station, year, month, day) %>%
+  mutate(hour = if_else(hour == 25L, 0L:23L, as.integer(hour))) %>%
+  ungroup()
 
 # After
 dayCheck_After <- airQuality[
@@ -119,7 +121,6 @@ print(dayCheck_After, row.names = FALSE)
 table(airQuality$hour, useNA = "ifany") # Every hour has 7,305 rows
 summary(airQuality$hour)
 sum(duplicated(airQuality[, c("station", "year", "month", "day", "hour")])) # 0 duplicate timestamps
-
 
 # ====
 # Check & clean ("PM2.5", "PM10", "SO2", "NO2", "CO", "O3") columns
@@ -244,20 +245,20 @@ sum(airQuality$PM2.5 > airQuality$PM10, na.rm = TRUE) # 0 violations remaining
 summary(airQuality)
 
 # Structural Checks
-nrow(airQuality)                                                            # Expect 175320
-table(airQuality$station)                                                   # Expect 35064 each
-range(airQuality$hour)                                                      # Expect 0 23
-sum(duplicated(airQuality[, c("station", "No")]))                           # Expect 0
-sum(duplicated(airQuality[, c("station", "year", "month", "day", "hour")])) # Expect 0
-length(unique(airQuality$wd))                                               # Expect 16 + NA
+nrow(airQuality)                                                            # Output: 175320
+table(airQuality$station)                                                   # Output: 35064 each station
+range(airQuality$hour)                                                      # Output: 0 23
+sum(duplicated(airQuality[, c("station", "No")]))                           # Output: 0
+sum(duplicated(airQuality[, c("station", "year", "month", "day", "hour")])) # Output: 0
+length(unique(airQuality$wd))                                               # Output: 16 + NA
 
 # Meteorological & Physical Checks
-sum(airQuality$TEMP <= -50, na.rm = TRUE)                                   # Expect 0
-sum(airQuality$DEWP <= -50, na.rm = TRUE)                                   # Expect 0
-min(airQuality$PRES, na.rm = TRUE)                                          # Expect > 0
-min(airQuality$RAIN, na.rm = TRUE)                                          # Expect >= 0
-min(airQuality$WSPM, na.rm = TRUE)                                          # Expect >= 0
-sum(airQuality$DEWP > airQuality$TEMP, na.rm = TRUE)                        # Expect 0
-sum(airQuality$PM2.5 > airQuality$PM10, na.rm = TRUE)                       # Expect 0
+sum(airQuality$TEMP <= -50, na.rm = TRUE)                                   # Output: 0
+sum(airQuality$DEWP <= -50, na.rm = TRUE)                                   # Output: 0
+min(airQuality$PRES, na.rm = TRUE)                                          # Output: 982.4
+min(airQuality$RAIN, na.rm = TRUE)                                          # Output: 0
+min(airQuality$WSPM, na.rm = TRUE)                                          # Output: 0
+sum(airQuality$DEWP > airQuality$TEMP, na.rm = TRUE)                        # Output: 0
+sum(airQuality$PM2.5 > airQuality$PM10, na.rm = TRUE)                       # Output: 0
 
 
